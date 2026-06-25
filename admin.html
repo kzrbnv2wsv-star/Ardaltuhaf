@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة إدارة الكتالوج — أرض التحف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1c1714;--paper:#f7f3ec;--paper-2:#efe8dc;--brass:#b08a3e;--brass-deep:#8a6a26;--clay:#a64b32;--line:#d9cfbe;--card:#fffdf9;--muted:#7a7065;--ok:#1f7a4d;--warn:#c9810c;--danger:#b33;--shadow:0 1px 2px rgba(28,23,20,.05),0 8px 30px rgba(28,23,20,.08)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+  h1,h2,h3,.kufi{font-family:'Reem Kufi',sans-serif}
+  header{background:var(--ink);color:var(--paper);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .mark{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--brass),var(--brass-deep));display:grid;place-items:center;color:#fff;font-family:'Reem Kufi';font-weight:700;font-size:19px}
+  header b{font-family:'Reem Kufi';font-size:17px;display:block}
+  header span{font-size:12px;color:#bcae9d}
+  .head-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{padding:10px 18px;border-radius:10px;font-family:'IBM Plex Sans Arabic';font-size:14px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:7px;transition:filter .15s,transform .15s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-gold{background:linear-gradient(135deg,var(--brass),var(--brass-deep));color:#fff}
+  .btn-ok{background:var(--ok);color:#fff}
+  .btn-out{background:transparent;color:var(--paper);border:1.5px solid #4a3d30}
+  .btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-danger{background:transparent;color:var(--danger);border:1.5px solid var(--danger)}
+  .btn-sm{padding:6px 12px;font-size:13px}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:24px}
+  .note{background:#fff7e6;border:1px solid #f0d99a;border-radius:12px;padding:14px 18px;font-size:14px;color:#5a4a1f;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start}
+  .note b{color:var(--brass-deep)}
+
+  .toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+  .toolbar input{flex:1;min-width:220px;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:'IBM Plex Sans Arabic';font-size:14px;background:#fff}
+  .toolbar input:focus{outline:none;border-color:var(--brass)}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  th,td{padding:12px 14px;text-align:right;font-size:14px;border-bottom:1px solid var(--line)}
+  th{background:var(--paper-2);font-weight:600;font-size:13px;color:#473f37}
+  tr:last-child td{border-bottom:none}
+  .pglyph{width:42px;height:42px;border-radius:8px;background:var(--paper-2);display:grid;place-items:center;font-family:'Reem Kufi';font-size:22px;color:var(--brass);overflow:hidden}
+  .pglyph img{width:100%;height:100%;object-fit:cover}
+  .st{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-block}
+  .st.ok{background:#e6f4ec;color:var(--ok)} .st.limited{background:#fdf0db;color:var(--warn)} .st.out{background:#fbe9e9;color:var(--danger)}
+  .row-actions{display:flex;gap:6px;justify-content:flex-end}
+  .tag-mini{font-size:11px;background:var(--ink);color:#fff;padding:2px 8px;border-radius:999px;margin-inline-start:4px}
+  .tag-mini.new{background:var(--clay)}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(28,23,20,.55);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-bg.open{display:flex}
+  .modal{background:var(--paper);border-radius:18px;width:min(640px,100%);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal-head{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--paper);z-index:2}
+  .modal-head h2{font-size:20px}
+  .close{background:none;border:none;font-size:26px;cursor:pointer;color:var(--muted)}
+  .modal-body{padding:22px 24px}
+  .fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field{margin-bottom:0}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:13px;font-weight:600;display:block;margin-bottom:5px}
+  .field label .req{color:var(--danger)}
+  .field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font-family:'IBM Plex Sans Arabic';font-size:14px;background:#fff;color:var(--ink)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brass)}
+  .checks{display:flex;gap:20px;align-items:center;grid-column:1/-1;margin-top:4px}
+  .checks label{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:500;cursor:pointer}
+  .checks input{width:18px;height:18px;accent-color:var(--brass-deep)}
+  .modal-foot{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;position:sticky;bottom:0;background:var(--paper)}
+  .hint{font-size:12px;color:var(--muted);margin-top:4px}
+  .cats-edit{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .cat-pill{background:#fff;border:1.5px solid var(--line);padding:6px 12px;border-radius:999px;font-size:13px;display:flex;align-items:center;gap:6px}
+  .cat-pill button{background:none;border:none;color:var(--danger);cursor:pointer;font-size:15px;line-height:1}
+  .toast{position:fixed;bottom:24px;inset-inline-start:24px;background:var(--ink);color:#fff;padding:13px 20px;border-radius:12px;font-size:14px;z-index:200;opacity:0;transform:translateY(20px);transition:.3s}
+  .toast.show{opacity:1;transform:translateY(0)}
+  @media(max-width:680px){.fg{grid-template-columns:1fr}th.hide,td.hide{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark">ت</div>
+    <div><b>لوحة إدارة الكتالوج</b><span>أرض التحف للتجارة</span></div>
+  </div>
+  <div class="head-actions">
+    <button class="btn btn-out" id="import-btn">📁 استيراد ملف</button>
+    <input type="file" id="import-file" accept=".json" hidden>
+    <button class="btn btn-gold" id="add-btn">＋ منتج جديد</button>
+    <button class="btn btn-ok" id="export-btn">⬇ تصدير products.json</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="note">
+    <span>ℹ️</span>
+    <div>
+      هذه اللوحة تعمل في متصفحك. أضف وعدّل المنتجات هنا، ثم اضغط <b>«تصدير products.json»</b> وارفع الملف الناتج إلى مستودع GitHub (مكان <b>index.html</b>) ليتحدّث الكتالوج. لتعديل بيانات موجودة، اضغط <b>«استيراد ملف»</b> وحمّل نسخة products.json الحالية أولاً.
+    </div>
+  </div>
+
+  <!-- بيانات الشركة -->
+  <details style="margin-bottom:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;box-shadow:var(--shadow)">
+    <summary style="padding:16px 18px;cursor:pointer;font-family:'Reem Kufi';font-size:16px;font-weight:600">⚙️ بيانات الشركة والإعدادات</summary>
+    <div style="padding:0 18px 20px">
+      <div class="fg">
+        <div class="field"><label>اسم الشركة</label><input id="c-name"></div>
+        <div class="field"><label>الشعار النصي (Tagline)</label><input id="c-tagline"></div>
+        <div class="field full"><label>نبذة مختصرة</label><textarea id="c-about" rows="2"></textarea></div>
+        <div class="field"><label>رقم واتساب <span class="req">*</span></label><input id="c-whatsapp" placeholder="9665XXXXXXXX"><div class="hint">صيغة دولية بدون + أو صفر البداية</div></div>
+        <div class="field"><label>المدينة</label><input id="c-city"></div>
+      </div>
+      <div style="margin-top:16px">
+        <label style="font-size:13px;font-weight:600">التصنيفات</label>
+        <div class="cats-edit" id="cats-edit"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input id="new-cat" placeholder="تصنيف جديد" style="flex:1;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-family:'IBM Plex Sans Arabic'">
+          <button class="btn btn-ghost btn-sm" id="add-cat">إضافة</button>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <div class="toolbar">
+    <input id="search" placeholder="بحث بالاسم أو رقم الصنف...">
+    <span style="font-size:14px;color:var(--muted)" id="count"></span>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th>الصورة</th><th>المنتج</th><th class="hide">الكود</th><th class="hide">التصنيف</th>
+      <th>الدرزن</th><th class="hide">الكرتون</th><th class="hide">الشد</th><th>الحالة</th><th>إجراءات</th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<!-- نافذة المنتج -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-head"><h2 id="modal-title">منتج جديد</h2><button class="close" id="modal-close">×</button></div>
+    <div class="modal-body">
+      <div class="fg">
+        <div class="field"><label>اسم المنتج <span class="req">*</span></label><input id="m-name"></div>
+        <div class="field"><label>رقم الصنف SKU <span class="req">*</span></label><input id="m-sku"></div>
+        <div class="field"><label>التصنيف</label><select id="m-cat"></select></div>
+        <div class="field"><label>الحالة</label><select id="m-status"><option>متوفر</option><option>كمية محدودة</option><option>نفد</option></select></div>
+        <div class="field"><label>سعر الدرزن (ر.س) <span class="req">*</span></label><input id="m-dozen" type="number" min="0"></div>
+        <div class="field"><label>سعر الكرتون (ر.س)</label><input id="m-carton" type="number" min="0"></div>
+        <div class="field"><label>شدّ الكرتون (عدد القطع)</label><input id="m-packing" type="number" min="0"></div>
+        <div class="field"><label>رمز العرض (بدون صورة)</label><input id="m-glyph" placeholder="✦ ❖ ⚱ ♛" maxlength="2"></div>
+        <div class="field full"><label>رابط الصورة (اختياري)</label><input id="m-img" placeholder="images/product.jpg أو رابط كامل"><div class="hint">اتركه فارغاً لاستخدام الرمز. الصور تُرفع لمجلد images في المستودع.</div></div>
+        <div class="field full"><label>وصف مختصر</label><textarea id="m-desc" rows="2"></textarea></div>
+        <div class="field full"><label>المواصفات</label><textarea id="m-specs" rows="2" placeholder="افصل بين البنود بعلامة |"></textarea><div class="hint">مثال: خامة: سيراميك | الارتفاع: ٣٢سم | لون: أبيض</div></div>
+        <div class="checks">
+          <label><input type="checkbox" id="m-new"> منتج جديد (شارة جديد)</label>
+          <label><input type="checkbox" id="m-best"> الأكثر طلباً</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="modal-cancel">إلغاء</button>
+      <button class="btn btn-gold" id="modal-save">حفظ المنتج</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DEFAULT_DATA={
+  company:{name:"أرض التحف للتجارة",tagline:"ARD AL-TUHAF · كتالوج الجملة",about:"شركة سعودية متخصصة في استيراد وتوزيع الهدايا والإضاءة والديكور والتحف من الصين، بعدّة فروع لخدمة تجار الجملة في المملكة.",whatsapp:"9665XXXXXXXX",city:"جدة · المملكة العربية السعودية"},
+  categories:["هدايا","ديكور وتحف"],
+  products:[
+    {sku:"GF-1024",name:"طقم هدايا فاخر مذهّب",cat:"هدايا",glyph:"❖",dozen:540,carton:2100,packing:48,status:"متوفر",new:false,best:true,desc:"علبة هدايا أنيقة بلمسات ذهبية، مناسبة للمناسبات والشركات.",specs:"خامة: كرتون مقوّى + طلاء ذهبي | المقاس: ٢٥×١٨سم"},
+    {sku:"DC-2031",name:"مزهرية سيراميك حديثة",cat:"ديكور وتحف",glyph:"⚱",dozen:456,carton:1780,packing:48,status:"كمية محدودة",new:true,best:false,desc:"مزهرية بتصميم عصري بألوان محايدة.",specs:"خامة: سيراميك | الارتفاع: ٣٢سم"}
+  ]
+};
+let DATA=JSON.parse(JSON.stringify(DEFAULT_DATA));
+let editingSku=null, searchTerm='';
+const $=s=>document.querySelector(s);
+const toAr=n=>String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const stClass=s=>s==='متوفر'?'ok':s==='كمية محدودة'?'limited':'out';
+
+function loadCompany(){
+  const c=DATA.company;
+  $('#c-name').value=c.name||''; $('#c-tagline').value=c.tagline||'';
+  $('#c-about').value=c.about||''; $('#c-whatsapp').value=c.whatsapp||''; $('#c-city').value=c.city||'';
+  renderCats();
+}
+function saveCompanyFromForm(){
+  DATA.company.name=$('#c-name').value.trim();
+  DATA.company.tagline=$('#c-tagline').value.trim();
+  DATA.company.about=$('#c-about').value.trim();
+  DATA.company.whatsapp=$('#c-whatsapp').value.trim();
+  DATA.company.city=$('#c-city').value.trim();
+}
+['c-name','c-tagline','c-about','c-whatsapp','c-city'].forEach(id=>{
+  document.addEventListener('input',e=>{ if(e.target.id===id) saveCompanyFromForm(); });
+});
+
+function renderCats(){
+  $('#cats-edit').innerHTML=DATA.categories.map((c,i)=>`<span class="cat-pill">${c}<button data-ci="${i}">×</button></span>`).join('');
+  $('#cats-edit').querySelectorAll('[data-ci]').forEach(b=>b.onclick=()=>{DATA.categories.splice(+b.dataset.ci,1);renderCats();fillCatSelect();});
+  fillCatSelect();
+}
+function fillCatSelect(){ $('#m-cat').innerHTML=DATA.categories.map(c=>`<option>${c}</option>`).join(''); }
+
+$('#add-cat').onclick=()=>{
+  const v=$('#new-cat').value.trim();
+  if(v&&!DATA.categories.includes(v)){DATA.categories.push(v);$('#new-cat').value='';renderCats();}
+};
+
+function renderTable(){
+  const list=DATA.products.filter(p=>{
+    const t=searchTerm.trim().toLowerCase();
+    return !t||p.name.toLowerCase().includes(t)||p.sku.toLowerCase().includes(t);
+  });
+  $('#count').textContent=`${toAr(list.length)} منتج`;
+  $('#tbody').innerHTML=list.map(p=>`<tr>
+    <td><div class="pglyph">${p.img?`<img src="${p.img}">`:(p.glyph||'✦')}</div></td>
+    <td><b>${p.name}</b>${p.new?'<span class="tag-mini new">جديد</span>':''}${p.best?'<span class="tag-mini">الأكثر</span>':''}</td>
+    <td class="hide">${p.sku}</td>
+    <td class="hide">${p.cat||'—'}</td>
+    <td>${toAr(p.dozen)} ر.س</td>
+    <td class="hide">${toAr(p.carton||0)} ر.س</td>
+    <td class="hide">${toAr(p.packing||0)}</td>
+    <td><span class="st ${stClass(p.status)}">${p.status}</span></td>
+    <td><div class="row-actions">
+      <button class="btn btn-ghost btn-sm" data-edit="${p.sku}">تعديل</button>
+      <button class="btn btn-danger btn-sm" data-del="${p.sku}">حذف</button>
+    </div></td>
+  </tr>`).join('')||`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">لا توجد منتجات</td></tr>`;
+  $('#tbody').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(b.dataset.edit));
+  $('#tbody').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delProduct(b.dataset.del));
+}
+
+function openModal(sku){
+  editingSku=sku||null;
+  fillCatSelect();
+  if(sku){
+    const p=DATA.products.find(x=>x.sku===sku);
+    $('#modal-title').textContent='تعديل المنتج';
+    $('#m-name').value=p.name||''; $('#m-sku').value=p.sku||''; $('#m-cat').value=p.cat||DATA.categories[0];
+    $('#m-status').value=p.status||'متوفر'; $('#m-dozen').value=p.dozen||''; $('#m-carton').value=p.carton||'';
+    $('#m-packing').value=p.packing||''; $('#m-glyph').value=p.glyph||''; $('#m-img').value=p.img||'';
+    $('#m-desc').value=p.desc||''; $('#m-specs').value=p.specs||''; $('#m-new').checked=!!p.new; $('#m-best').checked=!!p.best;
+  }else{
+    $('#modal-title').textContent='منتج جديد';
+    ['m-name','m-sku','m-dozen','m-carton','m-packing','m-glyph','m-img','m-desc','m-specs'].forEach(i=>$('#'+i).value='');
+    $('#m-cat').value=DATA.categories[0]||''; $('#m-status').value='متوفر'; $('#m-new').checked=false; $('#m-best').checked=false;
+  }
+  $('#modal-bg').classList.add('open');
+}
+function closeModal(){ $('#modal-bg').classList.remove('open'); }
+
+function saveProduct(){
+  const name=$('#m-name').value.trim(), sku=$('#m-sku').value.trim(), dozen=parseFloat($('#m-dozen').value);
+  if(!name||!sku||isNaN(dozen)){ showToast('الاسم ورقم الصنف وسعر الدرزن حقول إلزامية'); return; }
+  const dup=DATA.products.find(p=>p.sku===sku);
+  if(dup && dup.sku!==editingSku){ showToast('رقم الصنف مستخدم مسبقاً'); return; }
+  const obj={
+    sku, name, cat:$('#m-cat').value, status:$('#m-status').value,
+    dozen, carton:parseFloat($('#m-carton').value)||0, packing:parseInt($('#m-packing').value)||0,
+    glyph:$('#m-glyph').value.trim()||'✦', img:$('#m-img').value.trim(),
+    desc:$('#m-desc').value.trim(), specs:$('#m-specs').value.trim(),
+    new:$('#m-new').checked, best:$('#m-best').checked
+  };
+  if(editingSku){ const i=DATA.products.findIndex(p=>p.sku===editingSku); DATA.products[i]=obj; }
+  else DATA.products.push(obj);
+  closeModal(); renderTable(); showToast('تم الحفظ ✓');
+}
+function delProduct(sku){
+  if(!confirm('حذف هذا المنتج؟')) return;
+  DATA.products=DATA.products.filter(p=>p.sku!==sku); renderTable(); showToast('تم الحذف');
+}
+
+function exportJSON(){
+  saveCompanyFromForm();
+  if(!DATA.company.whatsapp || DATA.company.whatsapp.includes('X')){
+    if(!confirm('لم تُدخل رقم واتساب صحيح بعد. المتابعة؟')) return;
+  }
+  const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download='products.json'; a.click(); URL.revokeObjectURL(url);
+  showToast('تم تصدير products.json — ارفعه إلى GitHub');
+}
+
+function importJSON(file){
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(!d.products) throw new Error('بنية غير صحيحة');
+      DATA=d;
+      DATA.company=DATA.company||DEFAULT_DATA.company;
+      DATA.categories=DATA.categories||[];
+      loadCompany(); renderTable(); showToast('تم استيراد الملف ✓');
+    }catch(err){ showToast('ملف غير صالح: '+err.message); }
+  };
+  r.readAsText(file);
+}
+
+function showToast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2800); }
+
+$('#add-btn').onclick=()=>openModal(null);
+$('#modal-close').onclick=closeModal; $('#modal-cancel').onclick=closeModal;
+$('#modal-save').onclick=saveProduct;
+$('#modal-bg').onclick=e=>{ if(e.target===$('#modal-bg')) closeModal(); };
+$('#export-btn').onclick=exportJSON;
+$('#import-btn').onclick=()=>$('#import-file').click();
+$('#import-file').onchange=e=>{ if(e.target.files[0]) importJSON(e.target.files[0]); };
+$('#search').oninput=e=>{searchTerm=e.target.value;renderTable();};
+
+// محاولة تحميل products.json تلقائياً إن وُجد بجانب اللوحة
+(async()=>{
+  try{ const res=await fetch('products.json',{cache:'no-store'}); if(res.ok){ const d=await res.json(); if(d.products){DATA=d;} } }catch(e){}
+  loadCompany(); renderTable();
+})();
+</script>
+</body>
+</html>
