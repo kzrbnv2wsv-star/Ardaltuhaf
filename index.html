@@ -3,11 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أرض التحف — كتالوج الجملة</title>
+<title>أرض التحف — كتالوج الجملة | هدايا وديكور وتحف بالجملة</title>
+<meta name="description" content="كتالوج الجملة لأرض التحف — هدايا وديكور وتحف مستوردة بأسعار الجملة للدرزن والكرتون. تصفّح واطلب عبر واتساب مباشرة. جدة، السعودية.">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#1d1d1f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="أرض التحف">
+<meta property="og:title" content="أرض التحف — كتالوج الجملة">
+<meta property="og:description" content="هدايا وديكور وتحف مستوردة بأسعار الجملة. تصفّح الكتالوج واطلب عبر واتساب.">
+<meta property="og:url" content="https://kzrbnv2wsv-star.github.io/Ardaltuhaf/">
+<meta property="og:locale" content="ar_SA">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d1d1f'/%3E%3Ctext x='32' y='44' font-family='Arial' font-size='34' fill='%23b08a3e' text-anchor='middle' font-weight='bold'%3Eأ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
     --w:#ffffff; --w2:#f5f5f7; --w3:#fafafa;
@@ -100,12 +109,15 @@
   .price-line .from{font-size:12px;color:var(--ink3)}
   .price-line b{font-family:'Noto Kufi Arabic';font-size:21px;font-weight:700;color:var(--ink)}
   .price-line .unit{font-size:12px;color:var(--ink3)}
+  .vat-note{font-size:11px;color:var(--ink3);margin-top:3px;opacity:.85}
   .card-foot{margin-top:14px;display:flex;align-items:center;justify-content:space-between}
   .detail-hint{font-size:13px;color:var(--brass);font-weight:500}
   .quick-add{width:34px;height:34px;border-radius:50%;border:none;background:var(--w2);color:var(--ink);font-size:20px;cursor:pointer;display:grid;place-items:center;transition:background .2s,transform .2s var(--ease);line-height:1}
   .quick-add:hover{background:var(--ink);color:#fff}
   .quick-add:active{transform:scale(.9)}
   .empty{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--ink3)}
+  .sk{height:380px;border-radius:var(--r);background:linear-gradient(100deg,var(--w2) 40%,#eeeef2 50%,var(--w2) 60%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+  @keyframes shimmer{to{background-position:-200% 0}}
   .empty .big{font-size:48px;opacity:.3;margin-bottom:12px}
 
   /* ===== Overlay & sheets ===== */
@@ -255,7 +267,7 @@
       </div>
     </div>
   </div>
-  <div class="grid" id="grid"></div>
+  <div class="grid" id="grid"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
 </section>
 
 <footer>
@@ -272,13 +284,13 @@
 
 <div class="overlay" id="overlay"></div>
 
-<aside class="sheet" id="drawer">
+<aside class="sheet" id="drawer" role="dialog" aria-modal="true" aria-label="سلة المشتريات">
   <div class="sheet-head"><h2 id="drawer-title">السلة</h2><button class="close" id="close-drawer">✕</button></div>
   <div class="sheet-body" id="drawer-body"></div>
   <div class="sheet-foot" id="drawer-foot"></div>
 </aside>
 
-<aside class="sheet" id="pmodal">
+<aside class="sheet" id="pmodal" role="dialog" aria-modal="true" aria-label="تفاصيل المنتج">
   <div class="sheet-head"><h2>تفاصيل المنتج</h2><button class="close" id="close-pmodal">✕</button></div>
   <div class="sheet-body" id="pmodal-body"></div>
   <div class="sheet-foot" id="pmodal-foot"></div>
@@ -288,8 +300,11 @@
 
 <div class="toast" id="toast"></div>
 
+<noscript><div style="max-width:600px;margin:40px auto;padding:20px;text-align:center;font-family:sans-serif;border:1px solid #e8e8ed;border-radius:12px">هذا الكتالوج يتطلب تفعيل JavaScript في المتصفح لعرض المنتجات. للطلب مباشرة تواصل معنا عبر واتساب: <a href="https://wa.me/966551152802">+966 55 115 2802</a></div></noscript>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const FALLBACK={company:{name:"أرض التحف",tagline:"كتالوج الجملة",about:"شركة سعودية متخصصة في استيراد وتوزيع الهدايا والإضاءة والديكور والتحف من الصين، بعدّة فروع لخدمة تجار الجملة في المملكة.",whatsapp:"9665XXXXXXXX",city:"جدة · المملكة العربية السعودية"},categories:["هدايا","ديكور وتحف"],products:[
+const FALLBACK={company:{name:"أرض التحف",tagline:"كتالوج الجملة",about:"شركة سعودية متخصصة في استيراد وتوزيع الهدايا والإضاءة والديكور والتحف من الصين، بعدّة فروع لخدمة تجار الجملة في المملكة.",whatsapp:"966551152802",city:"جدة · المملكة العربية السعودية"},categories:["هدايا","ديكور وتحف"],products:[
   {sku:"GF-1024",name:"طقم هدايا فاخر مذهّب",cat:"هدايا",glyph:"❖",dozen:540,carton:2100,packing:48,status:"متوفر",new:false,best:true,desc:"علبة هدايا أنيقة بلمسات ذهبية، مناسبة للمناسبات والشركات.",specs:"الخامة: كرتون مقوّى + طلاء ذهبي | المقاس: ٢٥×١٨سم | الألوان: ذهبي، فضي"},
   {sku:"GF-1108",name:"صندوق هدايا خشبي منقوش",cat:"هدايا",glyph:"⬚",dozen:744,carton:1450,packing:24,status:"متوفر",new:false,best:false,desc:"صندوق خشبي بنقوش يدوية، مثالي للهدايا الراقية.",specs:"الخامة: خشب طبيعي | المقاس: ٣٠×٢٠سم | نقش يدوي"},
   {sku:"DC-2031",name:"مزهرية سيراميك حديثة",cat:"ديكور وتحف",glyph:"⚱",dozen:456,carton:1780,packing:48,status:"كمية محدودة",new:true,best:false,desc:"مزهرية بتصميم عصري بألوان محايدة تناسب كل ديكور.",specs:"الخامة: سيراميك | الارتفاع: ٣٢سم | ألوان: أبيض، رمادي، بيج"},
@@ -306,28 +321,34 @@ const cart={};
 const toAr=n=>String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 const fmt=n=>toAr(Number(n).toLocaleString('en-US'));
 const $=s=>document.querySelector(s);
+/* ===== حماية: تهريب النصوص وفلترة روابط الصور ===== */
+const esc=v=>String(v==null?'':v)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const safeImg=u=>{u=String(u||'').trim();return /^https?:\/\//i.test(u)?u:'';};
 
 /* ===== إعدادات Supabase ===== */
 const SB_URL='https://euncgsgyjrbicvzhjzxv.supabase.co';
 const SB_KEY='sb_publishable_BXuV57fRTwLREcHrhXOGPw_rKlVQN7_';
-const sb=window.supabase.createClient(SB_URL,SB_KEY);
-/* تحويل صف Supabase إلى الشكل الذي يفهمه الكود */
+const sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+/* تحويل صف Supabase إلى الشكل الذي يفهمه الكود (رابط الصورة يُفلتر هنا، والنصوص تُهرَّب عند العرض) */
 function mapRow(r){
-  return {sku:r.sku,name:r.name,cat:r.cat,glyph:r.glyph,img:r.image_url||'',
-    dozen:Number(r.dozen)||0,carton:Number(r.carton)||0,packing:r.packing||0,
-    status:r.status||'متوفر',new:!!r.is_new,best:!!r.is_best,
-    desc:r.descr||'',specs:r.specs||''};
+  return {sku:String(r.sku||''),name:String(r.name||''),cat:String(r.cat||''),glyph:String(r.glyph||''),img:safeImg(r.image_url),
+    dozen:Number(r.dozen)||0,carton:Number(r.carton)||0,packing:Number(r.packing)||0,
+    status:String(r.status||'متوفر'),new:!!r.is_new,best:!!r.is_best,
+    desc:String(r.descr||''),specs:String(r.specs||'')};
 }
 
 async function boot(){
   // اقرأ المنتجات من Supabase
   try{
-    const {data,error}=await sb.from('products').select('*').order('sort_order',{ascending:true});
-    if(!error && data && data.length){
-      DATA={...FALLBACK, products:data.map(mapRow)};
-      // التصنيفات تلقائياً من المنتجات الموجودة
-      const cats=[...new Set(data.map(r=>r.cat).filter(Boolean))];
-      if(cats.length)DATA.categories=cats;
+    if(sb){
+      const {data,error}=await sb.from('products').select('*').order('sort_order',{ascending:true});
+      if(!error && data && data.length){
+        DATA={...FALLBACK, products:data.map(mapRow)};
+        const cats=[...new Set(data.map(r=>r.cat).filter(Boolean))];
+        if(cats.length)DATA.categories=cats;
+      }
     }
   }catch(e){console.warn('تعذّر تحميل المنتجات من Supabase، سيتم استخدام البيانات الاحتياطية',e);}
   WA=(DATA.company&&DATA.company.whatsapp)||WA;
@@ -339,14 +360,17 @@ function applyCompany(){
   $('#foot-name').textContent=c.name||'أرض التحف';
   $('#foot-about').textContent=c.about||'';
   $('#foot-city').textContent=c.city||'';
-  $('#wa-disp').textContent='واتساب: +'+String(WA).replace(/X/g,'٠');
+  // تنسيق الرقم للعرض: +966 55 115 2802
+  const w=String(WA);
+  const disp=w.length===12?`+${w.slice(0,3)} ${w.slice(3,5)} ${w.slice(5,8)} ${w.slice(8)}`:`+${w}`;
+  $('#wa-disp').textContent='واتساب: '+disp;
 }
 function waLink(t){return `https://wa.me/${WA}?text=${encodeURIComponent(t)}`;}
 function stClass(s){return s==='متوفر'?'ok':s==='كمية محدودة'?'limited':'out';}
 
 function renderFilters(){
   const cats=['الكل',...(DATA.categories||[])];
-  $('#filters').innerHTML=cats.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-c="${c}">${c}</button>`).join('');
+  $('#filters').innerHTML=cats.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
   document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{activeCat=b.dataset.c;renderFilters();renderGrid();});
 }
 function visible(){
@@ -361,27 +385,28 @@ function visible(){
   else if(sortMode==='price-desc')l.sort((a,b)=>b.dozen-a.dozen);
   return l;
 }
-function imgH(p){return p.img?`<img src="${p.img}" alt="${p.name}" loading="lazy">`:`<span class="glyph">${p.glyph||'✦'}</span>`;}
+function imgH(p){return p.img?`<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.outerHTML='<span class=\\'glyph\\'>${esc(p.glyph)||'✦'}</span>'">`:`<span class="glyph">${esc(p.glyph)||'✦'}</span>`;}
 
 function renderGrid(){
   const list=visible(),grid=$('#grid');
   if(!list.length){grid.innerHTML=`<div class="empty"><div class="big">⚘</div>لا توجد منتجات مطابقة</div>`;return;}
   grid.innerHTML=list.map(p=>{
     const out=p.status==='نفد';
-    return `<article class="card" data-open="${p.sku}">
+    return `<article class="card" data-open="${esc(p.sku)}">
       <div class="thumb">
         <div class="badges">${p.new?'<span class="badge new">جديد</span>':''}${p.best?'<span class="badge best">الأكثر طلباً</span>':''}</div>
         ${imgH(p)}
-        <span class="stockpill ${stClass(p.status)}">${p.status}</span>
+        <span class="stockpill ${stClass(p.status)}">${esc(p.status)}</span>
       </div>
       <div class="card-body">
-        <h3>${p.name}</h3>
-        <div class="sku">${p.sku}</div>
-        <p class="desc">${p.desc||''}</p>
+        <h3>${esc(p.name)}</h3>
+        <div class="sku">${esc(p.sku)}</div>
+        <p class="desc">${esc(p.desc)}</p>
         <div class="price-line"><span class="from">من</span><b>${fmt(p.dozen)}</b><span class="unit">ر.س / درزن</span></div>
+        <div class="vat-note">السعر قبل الضريبة</div>
         <div class="card-foot">
           <span class="detail-hint">عرض التفاصيل ←</span>
-          ${out?'':`<button class="quick-add" data-add="${p.sku}" aria-label="إضافة سريعة">+</button>`}
+          ${out?'':`<button class="quick-add" data-add="${esc(p.sku)}" aria-label="إضافة سريعة">+</button>`}
         </div>
       </div>
     </article>`;
@@ -405,6 +430,10 @@ function addToCart(p,unit,qty){
 function uPrice(it){return it.unit==='dozen'?it.p.dozen:it.p.carton;}
 function lTotal(it){return uPrice(it)*it.qty;}
 function cTotal(){return Object.values(cart).reduce((s,it)=>s+lTotal(it),0);}
+/* ضريبة القيمة المضافة */
+const VAT_RATE=0.15;
+function cVat(){return cTotal()*VAT_RATE;}
+function cGrand(){return cTotal()+cVat();}
 function cCount(){return Object.values(cart).reduce((s,it)=>s+it.qty,0);}
 function updateCount(pop){const el=$('#cart-count');el.textContent=toAr(cCount());if(pop){el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),250);}}
 
@@ -413,18 +442,20 @@ function renderCart(){
   $('#drawer-title').textContent='السلة';
   if(!items.length){body.innerHTML=`<div class="cart-empty"><div class="big">🛍</div>سلتك فارغة<br><span style="font-size:13px">أضف منتجات لبدء طلبك</span></div>`;foot.innerHTML='';return;}
   body.innerHTML=items.map(([k,it])=>`<div class="ci">
-    <div class="ci-thumb">${it.p.img?`<img src="${it.p.img}">`:(it.p.glyph||'✦')}</div>
+    <div class="ci-thumb">${it.p.img?`<img src="${esc(it.p.img)}" alt="">`:(esc(it.p.glyph)||'✦')}</div>
     <div class="ci-info">
-      <h4>${it.p.name}</h4>
-      <div class="m">${it.p.sku} · ${it.unit==='dozen'?'درزن':'كرتون'} · ${fmt(uPrice(it))} ر.س</div>
+      <h4>${esc(it.p.name)}</h4>
+      <div class="m">${esc(it.p.sku)} · ${it.unit==='dozen'?'درزن':'كرتون'} · ${fmt(uPrice(it))} ر.س</div>
       <div class="ci-controls">
-        <div class="stepper"><button class="qty-btn" data-dec="${k}">−</button><span class="ci-qty">${toAr(it.qty)}</span><button class="qty-btn" data-inc="${k}">+</button></div>
+        <div class="stepper"><button class="qty-btn" data-dec="${esc(k)}" aria-label="إنقاص">−</button><span class="ci-qty">${toAr(it.qty)}</span><button class="qty-btn" data-inc="${esc(k)}" aria-label="زيادة">+</button></div>
         <span class="ci-total">${fmt(lTotal(it))} ر.س</span>
       </div>
-      <button class="ci-remove" data-rm="${k}">إزالة</button>
+      <button class="ci-remove" data-rm="${esc(k)}">إزالة</button>
     </div></div>`).join('');
   foot.innerHTML=`<div class="sumline"><span>الأصناف</span><span>${toAr(items.length)}</span></div>
-    <div class="sumline total"><span>الإجمالي</span><span>${fmt(cTotal())} ر.س</span></div>
+    <div class="sumline"><span>المجموع قبل الضريبة</span><span>${fmt(cTotal())} ر.س</span></div>
+    <div class="sumline"><span>ضريبة القيمة المضافة (١٥٪)</span><span>${fmt(cVat())} ر.س</span></div>
+    <div class="sumline total"><span>الإجمالي شامل الضريبة</span><span>${fmt(cGrand())} ر.س</span></div>
     <button class="checkout" id="go-checkout">متابعة الطلب ←</button>`;
   body.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{cart[b.dataset.inc].qty++;updateCount();renderCart();});
   body.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const k=b.dataset.dec;if(cart[k].qty>1)cart[k].qty--;else delete cart[k];updateCount();renderCart();});
@@ -443,7 +474,9 @@ function renderCheckout(){
       <div class="field"><label>المدينة</label><input id="f-city" placeholder="المدينة"></div>
       <div class="field"><label>ملاحظات</label><textarea id="f-notes" rows="2" placeholder="أي تفاصيل إضافية"></textarea></div>
     </div>`;
-  foot.innerHTML=`<div class="sumline total"><span>الإجمالي</span><span>${fmt(cTotal())} ر.س</span></div>
+  foot.innerHTML=`<div class="sumline"><span>المجموع قبل الضريبة</span><span>${fmt(cTotal())} ر.س</span></div>
+    <div class="sumline"><span>ضريبة القيمة المضافة (١٥٪)</span><span>${fmt(cVat())} ر.س</span></div>
+    <div class="sumline total"><span>الإجمالي شامل الضريبة</span><span>${fmt(cGrand())} ر.س</span></div>
     <button class="checkout" id="send-wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg>إرسال عبر واتساب</button>`;
   $('#back-cart').onclick=renderCart;
   $('#send-wa').onclick=sendOrder;
@@ -453,6 +486,10 @@ function sendOrder(){
   const name=$('#f-name'),phone=$('#f-phone');let ok=true;
   [name,phone].forEach(f=>{if(!f.value.trim()){f.classList.add('err');ok=false;}else f.classList.remove('err');});
   if(!ok){showToast('الرجاء تعبئة الاسم ورقم الجوال');return;}
+  // تحقق بسيط من صيغة الجوال (٩–١٥ رقماً بعد إزالة الفواصل)
+  const digits=phone.value.replace(/[^0-9]/g,'');
+  if(digits.length<9||digits.length>15){phone.classList.add('err');showToast('رقم الجوال غير صحيح — تأكد من الرقم');return;}
+  phone.classList.remove('err');
   const company=$('#f-company').value.trim(),city=$('#f-city').value.trim(),notes=$('#f-notes').value.trim();
   let m='🧾 *طلب جملة جديد — أرض التحف*\n━━━━━━━━━━━━━━\n';
   m+=`👤 المسؤول: ${name.value.trim()}\n`;
@@ -462,9 +499,11 @@ function sendOrder(){
   m+='━━━━━━━━━━━━━━\n*الأصناف:*\n';
   Object.values(cart).forEach((it,i)=>{m+=`\n${i+1}) ${it.p.name}\n   • الكود: ${it.p.sku}\n   • ${it.unit==='dozen'?'درزن':'كرتون'} × ${it.qty}\n   • ${uPrice(it).toLocaleString('en-US')} ر.س | إجمالي: ${lTotal(it).toLocaleString('en-US')} ر.س\n`;});
   m+='━━━━━━━━━━━━━━\n';
-  m+=`💰 *الإجمالي: ${cTotal().toLocaleString('en-US')} ر.س*\n`;
+  m+=`💵 المجموع قبل الضريبة: ${cTotal().toLocaleString('en-US')} ر.س\n`;
+  m+=`🧮 ضريبة القيمة المضافة (١٥٪): ${cVat().toLocaleString('en-US')} ر.س\n`;
+  m+=`💰 *الإجمالي شامل الضريبة: ${cGrand().toLocaleString('en-US')} ر.س*\n`;
   if(notes)m+=`\n📝 ${notes}\n`;
-  window.open(waLink(m),'_blank');
+  window.open(waLink(m),'_blank','noopener');
 }
 
 let pmUnit='dozen';
@@ -472,21 +511,22 @@ function openProduct(sku){
   const p=DATA.products.find(x=>x.sku===sku);if(!p)return;
   const out=p.status==='نفد';pmUnit='dozen';
   $('#pmodal-body').innerHTML=`
-    <div class="pm-hero">${p.img?`<img src="${p.img}">`:(p.glyph||'✦')}</div>
-    <div class="pm-title">${p.name}</div>
-    <div class="pm-sku">${p.sku}</div>
-    <span class="pm-status ${stClass(p.status)}">${p.status}</span>
-    <p class="pm-desc">${p.desc||''}</p>
+    <div class="pm-hero">${p.img?`<img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.outerHTML='${esc(p.glyph)||'✦'}'">`:(esc(p.glyph)||'✦')}</div>
+    <div class="pm-title">${esc(p.name)}</div>
+    <div class="pm-sku">${esc(p.sku)}</div>
+    <span class="pm-status ${stClass(p.status)}">${esc(p.status)}</span>
+    <p class="pm-desc">${esc(p.desc)}</p>
     <div class="pm-prices">
       <div class="pm-pbox"><span>سعر الدرزن</span><b>${fmt(p.dozen)} <small style="font-size:13px;font-weight:400">ر.س</small></b></div>
       <div class="pm-pbox"><span>سعر الكرتون</span><b>${fmt(p.carton)} <small style="font-size:13px;font-weight:400">ر.س</small></b></div>
     </div>
+    <div class="vat-note" style="text-align:center;margin:-4px 0 4px">جميع الأسعار قبل ضريبة القيمة المضافة (١٥٪)</div>
     <div class="pm-specs">
       <h4>التفاصيل</h4>
       <div class="specrow"><span>شدّ الكرتون</span><span>${toAr(p.packing)} قطعة</span></div>
       <div class="specrow"><span>الحد الأدنى</span><span>درزن واحد</span></div>
-      ${p.cat?`<div class="specrow"><span>التصنيف</span><span>${p.cat}</span></div>`:''}
-      ${p.specs?p.specs.split('|').map(s=>{const t=s.split(':');return t.length>1?`<div class="specrow"><span>${t[0].trim()}</span><span>${t.slice(1).join(':').trim()}</span></div>`:`<div class="specrow"><span>${s.trim()}</span><span></span></div>`;}).join(''):''}
+      ${p.cat?`<div class="specrow"><span>التصنيف</span><span>${esc(p.cat)}</span></div>`:''}
+      ${p.specs?p.specs.split('|').map(s=>{const t=s.split(':');return t.length>1?`<div class="specrow"><span>${esc(t[0].trim())}</span><span>${esc(t.slice(1).join(':').trim())}</span></div>`:`<div class="specrow"><span>${esc(s.trim())}</span><span></span></div>`;}).join(''):''}
     </div>`;
   $('#pmodal-foot').innerHTML=out?`<div style="text-align:center;color:var(--danger);font-weight:600;padding:8px">نفدت الكمية حالياً</div>`:`
     <div class="unit-toggle">
