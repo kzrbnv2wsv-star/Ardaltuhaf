@@ -128,6 +128,8 @@
   #drawer{left:0;transform:translateX(-110%);box-shadow:8px 0 40px rgba(0,0,0,.12)}
   #pmodal{right:0;transform:translateX(110%);box-shadow:-8px 0 40px rgba(0,0,0,.12)}
   .sheet.open{transform:translateX(0)}
+  /* إصلاح تعارض الأولوية: قاعدة المعرّف #drawer أقوى من .sheet.open فتمنع الفتح */
+  #drawer.open,#pmodal.open{transform:translateX(0)}
   .sheet-head{padding:20px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
   .sheet-head h2{font-size:19px;font-weight:600}
   .close{width:32px;height:32px;border-radius:50%;background:var(--w2);border:none;font-size:18px;cursor:pointer;color:var(--ink2);display:grid;place-items:center;transition:background .2s}
